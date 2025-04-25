@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quick Meme Generator</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        select, input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .meme-container {
+            position: relative;
+            margin-top: 30px;
+            text-align: center;
+        }
+        .meme-img {
+            max-width: 100%;
+            border: 1px solid #ddd;
+        }
+        .meme-text {
+            position: absolute;
+            width: 100%;
+            text-align: center;
+            font-family: Impact, Arial, sans-serif;
+            font-size: 32px;
+            font-weight: bold;
+            color: white;
+            text-shadow: 2px 2px 0 #000, -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000;
+            padding: 0 10px;
+        }
+        .top-text {
+            top: 10px;
+        }
+        .bottom-text {
+            bottom: 10px;
+        }
+        .download-btn {
+            background-color: #2196F3;
+            margin-top: 10px;
+        }
+        .download-btn:hover {
+            background-color: #0b7dda;
+        }
+        .github-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Quick Meme Generator</h1>
+        
+        <div class="form-group">
+            <label for="template">Select Template:</label>
+            <select id="template" onchange="updateTemplate()">
+                <option value="https://i.imgflip.com/4/1bij.jpg">One Does Not Simply</option>
+                <option value="https://i.imgflip.com/4/1bgw.jpg">Distracted Boyfriend</option>
+                <option value="https://i.imgflip.com/4/9vct.jpg">Doge</option>
+                <option value="https://i.imgflip.com/4/1bhk.jpg">Change My Mind</option>
+                <option value="https://i.imgflip.com/4/1g8my.jpg">Drake</option>
+                <option value="https://i.imgflip.com/4/1ihzj.jpg">Roll Safe</option>
+                <option value="https://i.imgflip.com/4/1otk.jpg">Success Kid</option>
+                <option value="https://i.imgflip.com/4/1bh8.jpg">Batman Slapping Robin</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label for="topText">Top Text:</label>
+            <input type="text" id="topText" placeholder="Enter top text" oninput="updateMeme()">
+        </div>
+        
+        <div class="form-group">
+            <label for="bottomText">Bottom Text:</label>
+            <input type="text" id="bottomText" placeholder="Enter bottom text" oninput="updateMeme()">
+        </div>
+        
+        <button onclick="generateMeme()">Generate Meme</button>
+        
+        <div id="memeOutput" class="meme-container" style="display: none;">
+            <div id="topTextOutput" class="meme-text top-text"></div>
+            <img id="memeImg" class="meme-img" src="" alt="Meme Template">
+            <div id="bottomTextOutput" class="meme-text bottom-text"></div>
+            <button class="download-btn" onclick="downloadMeme()">Download Meme</button>
+        </div>
+        
+        <a href="https://github.com/username/quick-meme-generator" class="github-link" target="_blank">View on GitHub</a>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
+    <script>
+        // Initialize with the first template
+        window.onload = function() {
+            updateTemplate();
+        };
+
+        function updateTemplate() {
+            const templateUrl = document.getElementById('template').value;
+            document.getElementById('memeImg').src = templateUrl;
+            document.getElementById('memeOutput').style.display = 'none';
+        }
+
+        function updateMeme() {
+            const topText = document.getElementById('topText').value;
+            const bottomText = document.getElementById('bottomText').value;
+            
+            document.getElementById('topTextOutput').innerText = topText.toUpperCase();
+            document.getElementById('bottomTextOutput').innerText = bottomText.toUpperCase();
+        }
+
+        function generateMeme() {
+            updateMeme();
+            document.getElementById('memeOutput').style.display = 'block';
+        }
+
+        function downloadMeme() {
+            const memeContainer = document.getElementById('memeOutput');
+            
+            html2canvas(memeContainer, {
+                onrendered: function(canvas) {
+                    const imgData = canvas.toDataURL('image/png');
+                    const link = document.createElement('a');
+                    link.download = 'my-meme.png';
+                    link.href = imgData;
+                    link.click();
+                }
+            });
+        }
+    </script>
+</body>
+</html>
